@@ -331,3 +331,115 @@ kubectl get pods --all-namespaces
 kubectl run nginx --image nginx
 kubectl describe deploy nginx
 [ Kube 30.1 ] Kubernetes 1.17 on LXC Containers
+
+[Windows Terminal Commands]
+Create a new pane, splitting horizontally: Alt+Shift+- (Alt, Shift, and a minus sign)
+Create a new pane, splitting vertically: Alt+Shift++ (Alt, Shift, and a plus sign)
+Move pane focus: Alt+Left, Alt+Right, Alt+Down, Alt+Up
+Resize the focused pane: Alt+Shift+Left, Alt+Shift+Right, Alt+Shift+Down, Alt+Shift+Up
+Close a pane: Ctrl+Shift+W
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
+kubectl create clusterrolebinding default-admin --clusterrole cluster-admin --serviceaccount=default:default
+token=$(kubectl get secrets -o jsonpath="{.items[?(@.metadata.annotations['kubernetes\.io/service-account\.name']=='default')].data.token}"|base64 --decode)
+echo $token
+eyJhbGciOiJSUzI1NiIsImtpZCI6Ii1aVE1QLTVGMWRWWllxUkRCdGNlWHoxWGVsX0lVdE1WRnNaUGpzM2JnTVkifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRlZmF1bHQtdG9rZW4tanB4ZDUiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGVmYXVsdCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6ImNiNzJjMjRkLTFiOTMtNGJkZC1hZmZhLWI2NmYzYmQ5ZTE0ZCIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OmRlZmF1bHQifQ.dyqi6KCGws0ZGUXVRR21UpXPDOPshOFZ8sb6fCSv-soXclu7d0uDE8XU_Df3iJhSjDL_N2qQT9lk5hgpDCJUG_SFBtAtihtmDGv37qfR_ER0tqBfRQrsVh8Hp02qEjbgU_Cz0dzmMPA0CoCXs1hnsR5VhHRy_PTyETGlipl0szkuzdJqVO2ezMfVMJYknWk9tcrFTpkHnwMQpMY0WZ6VDO4j0_CIgmi1QD3itmtUJcfNUdtgdCQo2fJthDJwg2QWQYdZRh4k5KdDBMtnyKtZDW0nd5HB1fyHz_5dbwSXape762lErS-r8XVp6cFJcCw5vjrz92MH7aB8JgkWI9ldbg
+
+kubectl proxy
+http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+[ Kube 50 ] Installing Istio in Kubernetes Cluster
+curl -L https://istio.io/downloadIstio | sh -
+mv istio-1.7.3/bin/istioctl /usr/local/bin/
+istioctl install --set profile=demo
+Rancher Meetup - May 2020 - Simplifying Your Cloud-Native Development Workflow With K3s, K3c and K3d
+git clone https://github.com/iwilltry42/k3d-demo.git
+k3d cluster create demo --api-port 6550 --servers 1 --agents 3 --port 8080:80@loadbalancer --volume /mnt/e/Kubernetes/k3d-play/k3d-demo/sample:/src@all --wait
+k3d cluster get
+docker build sample/ -f sample/Dockerfile -t sample-app:local
+k3d image import -c demo sample-app:local
+kubectl create namespace demo
+kubectl config set-context --current --namespace=demo
+helm upgrade --install sample-app sample/conf/charts/sample-app --namespace demo --set app.image=sample-app:local
+sample.k3d.localhost:8080
+kubectl get cm -n kube-system
+kubectl edit cm traefik -n kube-system
+kubectl -n kube-system scale deploy treafik --replicas 0
+kubectl -n kube-system scale deploy treafik --replicas 1
+kubectl -n kube-system port-forward deployment/traefik 4100
+k3d cluster create demo --api-port 6550 --servers 1 --agents 2 --no-lb --wait
+kubectl get svc  -n istio-system istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+k3d kubeconfig merge mycluster --merge-default-kubeconfig
+docker build kitchen-web/ -f kitchen-web/Dockerfile -t kitchen-ui:local
+k3d cluster create kitchenCastle --api-port 6550 --servers 1 --agents 3 --port 8081:80@loadbalancer  --wait
+k3d image import -c kitchenCastle kitchen-ui:local
+helm upgrade --install kitchen-ui /mnt/e/Kubernetes/civo/lab/kitchen/kitchen-web/conf/charts/kitchen-ui --namespace kitchen --set app.image=kitchen-ui:local
+docker run --rm -p 5000:5000 -ti  -e PORT=5000 kitchen-ui:local
+----------Deploy Dotnet app------
+https://www.openfaas.com/blog/asp-net-core/
+https://www.civo.com/learn/guide-to-build-a-crud-api-with-postgresl-and-node-js-with-openfaas
+
+civo kubernetes ls
+civo kubernetes config --save kitchen-infra
+kubectl config get-contexts
+curl -sLSf https://cli.openfaas.com | sudo sh
+export OPENFAAS_PREFIX="15091983"
+9f591d11-f4fb-4142-880a-e74e27283fbb.k8s.civo.com
+export DNS="9f591d11-f4fb-4142-880a-e74e27283fbb.k8s.civo.com" # As per dashboard
+export OPENFAAS_URL=http://$DNS:31112
+PASSWORD=$(kubectl get secret -n openfaas basic-auth -o jsonpath="{.data.basic-auth-password}" | base64 --decode; echo)
+echo -n $PASSWORD | faas-cli login --username admin --password-stdin
+faas-cli template store list
+faas-cli new --lang dockerfile api
+faas-cli build
+faas-cli up
+faas-cli logs kitchen-api
+
+http://e5044069-1863-4b89-a143-32a59a960bd3.k8s.civo.com.k8s.civo.com:31112/function/api.openfaas-fn
+
+mongo mongodb://hLfr9jmt9CmZrsBvizBh2yom9De8cu:aHJvW8frImLm6LAYHD2dleuDtnNVaq@mongodb:27017/test?authSource=admin
+-------------------
+https://www.civo.com/learn/set-up-a-private-docker-registry-with-tls-on-kubernetes
+docker run --rm -p 8080:8080 -ti 15091983/kitchen-api:latest
+
+
+docker run --rm -d -p 27017:27017 -v /mnt/e/Kubernetes/civo/lab/kitchen/Data:/data/db mongo
+k3d kubeconfig merge kitchenCastle --merge-default-kubeconfig
+kubectl config get-contexts
+kubectl config set-context kitchen-infra
+kubectl config use-context kitchen-infra
+
+kubectl port-forward svc/prometheus-operator-grafana 8080:80  -n monitoring
+kubectl port-forward svc/prometheus-prometheus-operator-prometheus 9090
+kubectl port-forward svc/prometheus-prometheus-operator-alertmanager 9093
+Username: admin and Password: prom-operator
+
+/root/.ssh/id_rsa
+https://91.211.153.196:6443
+export IP="91.211.153.196"
+
+export USER="hLfr9jmt9CmZrsBvizBh2yom9De8cu"
+export PASS="aHJvW8frImLm6LAYHD2dleuDtnNVaq"
+export HOST="mongodb-59698d7847-k2658.mongodb.default.kitchen-infra-v1"
+
+kubectl create secret generic -n openfaas-fn db \
+  --from-literal db-username="$USER" \
+  --from-literal db-password="$PASS" \
+  --from-literal db-host="$HOST"
+
+kubectl create secret generic secret-appsettings --from-file=./secret-appsettings=appsettings.secrets.json -n openfaas-fn
+kubectl create secret generic secret-api-key \
+  --from-file=secret-api-key=secret-api-key.txt \
+  --namespace openfaas-fn 
+
+  <k8s-pod-name>.<k8s-internal-service-name>.<k8s-namespace>.<cluster-name>
+  mongodb-59698d7847-k2658.mongodb.default.kitchen-infra-v1
+  ----Install mongodb in local k3d
+  curl -sLS https://dl.get-arkade.dev | sudo sh
+  arkade install mongodb
+    --using /root/.kube/config
+  mongodb.default.svc.cluster.local
+  export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace default mongodb -o jsonpath="{.data.mongodb-root-password}" | base64 --decode)
+  kubectl run --namespace default mongodb-client --rm --tty -i --restart='Never' --image docker.io/bitnami/mongodb:4.2.4-debian-10-r0 --command -- mongo admin --host mongodb --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD
+  kubectl port-forward --namespace default svc/mongodb 27017:27017 &
+mongo --host 127.0.0.1 --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD
